@@ -339,9 +339,20 @@
   }
   .field-kit p{ margin:0; color:var(--ink-soft); font-size:0.96rem; }
 
-  form.subscribe{ display:flex; gap:0; }
-  form.subscribe input{
+  .embeddable-buttondown-form{ display:flex; flex-wrap:wrap; gap:0; }
+  .embeddable-buttondown-form label{
+    /* visually hidden but still available to screen readers */
+    position:absolute;
+    width:1px; height:1px;
+    padding:0; margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+  .embeddable-buttondown-form input[type="email"]{
     flex:1;
+    min-width:0;
     font-family:'JetBrains Mono', monospace;
     font-size:0.85rem;
     padding:12px 14px;
@@ -351,8 +362,8 @@
     color:var(--ink);
     border-radius:2px 0 0 2px;
   }
-  form.subscribe input::placeholder{ color:var(--ink-soft); }
-  form.subscribe button{
+  .embeddable-buttondown-form input[type="email"]::placeholder{ color:var(--ink-soft); }
+  .embeddable-buttondown-form input[type="submit"]{
     font-family:'JetBrains Mono', monospace;
     font-size:0.78rem;
     text-transform:uppercase;
@@ -365,14 +376,20 @@
     cursor:pointer;
     transition:background 0.2s ease;
   }
-  form.subscribe button:hover{ background:var(--pine-deep); }
-  .subscribe-note{
-    grid-column:1 / -1;
-    font-family:'JetBrains Mono', monospace;
-    font-size:0.72rem;
-    color:var(--pine);
-    min-height:1em;
+  .embeddable-buttondown-form input[type="submit"]:hover{ background:var(--pine-deep); }
+  .embeddable-buttondown-form p{
+    flex-basis:100%;
+    margin:10px 0 0 0;
   }
+  .embeddable-buttondown-form p a{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+    text-decoration:none;
+    border-bottom:1px solid var(--rule);
+  }
+  .embeddable-buttondown-form p a:hover{ color:var(--rust); border-bottom-color:var(--rust); }
 
   footer.site-footer{
     grid-column:2;
@@ -527,12 +544,18 @@
         <p>A short dispatch when there's something worth writing down — a migration push, a good sighting, an occasional correction. No spam, no gear affiliate links.</p>
       </div>
       <div>
-        <form class="subscribe" id="subscribe-form">
-          <label class="skiplink" for="email-input">Email address</label>
-          <input id="email-input" type="email" placeholder="you@example.com" required>
-          <button type="submit">Subscribe</button>
+        <form
+          action="https://buttondown.com/api/emails/embed-subscribe/farinaturephotos"
+          method="post"
+          class="embeddable-buttondown-form"
+        >
+          <label for="bd-email">Enter your email</label>
+          <input type="email" name="email" id="bd-email" placeholder="you@example.com" required>
+          <input type="submit" value="Subscribe" />
+          <p>
+            <a href="https://buttondown.com/refer/farinaturephotos" target="_blank">Powered by Buttondown.</a>
+          </p>
         </form>
-        <div class="subscribe-note" id="subscribe-note"></div>
       </div>
     </section>
 
@@ -578,18 +601,6 @@
     }
 
     updateTally();
-
-    // Lightweight, honest subscribe form (no backend attached).
-    const form = document.getElementById('subscribe-form');
-    const note = document.getElementById('subscribe-note');
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      const email = document.getElementById('email-input').value.trim();
-      if(email){
-        note.textContent = 'Saved — ' + email + ' will get the next dispatch. (Hook this form up to your email service to make it real.)';
-        form.reset();
-      }
-    });
   })();
 </script>
 
